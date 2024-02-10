@@ -21,7 +21,12 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> startBarcodeScanStream() async {
     FlutterBarcodeScanner.getBarcodeStreamReceiver(
-            '#ff6666', 'Cancel', true, ScanMode.BARCODE)!
+      lineColor: '#ff6666',
+      scanMode: ScanMode.QR,
+      alertText: '457 TL Provizyon göte giriyor upss diye...',
+      titleText: 'Taratttt',
+      isUserPremium: false,
+    )!
         .listen((barcode) => print(barcode));
   }
 
@@ -30,7 +35,12 @@ class _MyAppState extends State<MyApp> {
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-          '#ff6666', 'Cancel', true, ScanMode.QR);
+        lineColor: '#ff6666',
+        scanMode: ScanMode.QR,
+        alertText: '786 TL Provizyon göte giriyor zank diye...',
+        titleText: 'Sürüş için tarat',
+        isUserPremium: false,
+      );
       print(barcodeScanRes);
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
@@ -52,7 +62,12 @@ class _MyAppState extends State<MyApp> {
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-          '#ff6666', 'Cancel', true, ScanMode.BARCODE);
+        lineColor: '#ff6666',
+        scanMode: ScanMode.QR,
+        alertText: '123 TL Provizyon göte giriyor şak diye',
+        titleText: 'Sür köpek',
+        isUserPremium: false,
+      );
       print(barcodeScanRes);
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
@@ -76,22 +91,12 @@ class _MyAppState extends State<MyApp> {
             body: Builder(builder: (BuildContext context) {
               return Container(
                   alignment: Alignment.center,
-                  child: Flex(
-                      direction: Axis.vertical,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        ElevatedButton(
-                            onPressed: () => scanBarcodeNormal(),
-                            child: Text('Start barcode scan')),
-                        ElevatedButton(
-                            onPressed: () => scanQR(),
-                            child: Text('Start QR scan')),
-                        ElevatedButton(
-                            onPressed: () => startBarcodeScanStream(),
-                            child: Text('Start barcode scan stream')),
-                        Text('Scan result : $_scanBarcode\n',
-                            style: TextStyle(fontSize: 20))
-                      ]));
+                  child: Flex(direction: Axis.vertical, mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                    ElevatedButton(onPressed: () => scanBarcodeNormal(), child: Text('Start barcode scan')),
+                    ElevatedButton(onPressed: () => scanQR(), child: Text('Start QR scan')),
+                    ElevatedButton(onPressed: () => startBarcodeScanStream(), child: Text('Start barcode scan stream')),
+                    Text('Scan result : $_scanBarcode\n', style: TextStyle(fontSize: 20))
+                  ]));
             })));
   }
 }

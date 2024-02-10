@@ -15,6 +15,7 @@
  */
 package com.amolg.flutterbarcodescanner.camera;
 
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -24,7 +25,8 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
-
+import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.amolg.flutterbarcodescanner.BarcodeCaptureActivity;
 import com.amolg.flutterbarcodescanner.FlutterBarcodeScannerPlugin;
@@ -39,21 +41,29 @@ import java.util.Vector;
 
 public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
     private final Object mLock = new Object();
-    private float mWidthScaleFactor = 1.0f, mHeightScaleFactor = 1.0f;
+    private final float mWidthScaleFactor = 1.0f;
+    private final float mHeightScaleFactor = 1.0f;
 
     private int mFacing = CameraSource.CAMERA_FACING_BACK;
-    private Set<T> mGraphics = new HashSet<>();
+    private final Set<T> mGraphics = new HashSet<>();
 
     /**
      * Custom added values for overlay
      */
     private float left, top, endY;
-    private int rectWidth, rectHeight, frames, lineColor, lineWidth;
+    private final int rectWidth;
+    private final int rectHeight;
+    private final int frames;
+    private final int lineColor;
+    private final int lineWidth;
     private boolean revAnimation;
+
+    private final String alertText;
+    private final boolean isUserPremium;
 
 
     public static abstract class Graphic {
-        private GraphicOverlay mOverlay;
+        private final GraphicOverlay mOverlay;
 
         public Graphic(GraphicOverlay overlay) {
             mOverlay = overlay;
@@ -94,6 +104,9 @@ public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
                 ? AppConstants.BARCODE_RECT_HEIGHT : (int) (AppConstants.BARCODE_RECT_HEIGHT / 1.5);
 
         lineColor = Color.parseColor(FlutterBarcodeScannerPlugin.lineColor);
+        alertText = FlutterBarcodeScannerPlugin.alertText;
+        isUserPremium = FlutterBarcodeScannerPlugin.isUserPremium;
+
 
         lineWidth = AppConstants.BARCODE_LINE_WIDTH;
         frames = AppConstants.BARCODE_FRAMES;
@@ -133,7 +146,7 @@ public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
 
     public List<T> getGraphics() {
         synchronized (mLock) {
-            return new Vector(mGraphics);
+            return new Vector<>(mGraphics);
         }
     }
 
@@ -145,7 +158,7 @@ public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
         return mHeightScaleFactor;
     }
 
-    public void setCameraInfo(int previewWidth, int previewHeight, int facing) {
+    public void setCameraInfo(int facing) {
         synchronized (mLock) {
             mFacing = facing;
         }
@@ -155,15 +168,48 @@ public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        Paint paint = new Paint();
 
+        if (!isUserPremium) {
+            FrameLayout alertLayout = new FrameLayout(getContext());
+
+            TextView alertTextView = new TextView(getContext());
+            alertTextView.setText(alertText);
+            alertTextView.setTextColor(Color.BLACK);
+            alertTextView.setTextSize(12);
+            alertTextView.setBackgroundColor(Color.WHITE);
+            alertTextView.setPadding(13, 13, 13, 13);
+
+            alertLayout.addView(alertTextView);
+
+
+            int leftPadding = (int) (getWidth() * 0.25);
+            int topPadding = (int) (getHeight() * 0.1);
+
+
+            alertLayout.measure(getWidth(), getHeight());
+            alertLayout.layout(leftPadding, topPadding, leftPadding, topPadding);
+
+            //TODO position alert text to top center (leftPadding, topPadding)
+
+            alertLayout.draw(canvas);
+
+
+        }
+
+
+        drawRectangleAndLine(canvas, paint);
+    }
+
+    private void drawRectangleAndLine(Canvas canvas, Paint paint) {
         // draw transparent rect
-        int cornerRadius = 0;
-        Paint eraser = new Paint();
-        eraser.setAntiAlias(true);
-        eraser.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        int cornerRadius = 10;
+
+        paint.setAntiAlias(true);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
 
         RectF rect = new RectF(left, top, AppUtil.dpToPx(getContext(), rectWidth) + left, AppUtil.dpToPx(getContext(), rectHeight) + top);
-        canvas.drawRoundRect(rect, (float) cornerRadius, (float) cornerRadius, eraser);
+        canvas.drawRoundRect(rect, (float) cornerRadius, (float) cornerRadius, paint);
 
         // draw horizontal line
         Paint line = new Paint();
