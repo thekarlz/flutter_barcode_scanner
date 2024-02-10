@@ -23,8 +23,8 @@ class _MyAppState extends State<MyApp> {
     FlutterBarcodeScanner.getBarcodeStreamReceiver(
       lineColor: '#ff6666',
       scanMode: ScanMode.QR,
-      alertText: '457 TL Provizyon göte giriyor upss diye...',
-      titleText: 'Taratttt',
+      alertText: 'From your wallet after scanning the QR code for your card will be charged a 20 ₺ authorization',
+      titleText: 'Scan For Ride',
       isUserPremium: false,
     )!
         .listen((barcode) => print(barcode));
@@ -37,8 +37,8 @@ class _MyAppState extends State<MyApp> {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
         lineColor: '#ff6666',
         scanMode: ScanMode.QR,
-        alertText: '786 TL Provizyon göte giriyor zank diye...',
-        titleText: 'Sürüş için tarat',
+        alertText: 'From your wallet after scanning the QR code for your card will be charged a 20 ₺ authorization',
+        titleText: 'Scan For Ride',
         isUserPremium: false,
       );
       print(barcodeScanRes);
@@ -64,8 +64,8 @@ class _MyAppState extends State<MyApp> {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
         lineColor: '#ff6666',
         scanMode: ScanMode.QR,
-        alertText: '123 TL Provizyon göte giriyor şak diye',
-        titleText: 'Sür köpek',
+        alertText: 'From your wallet after scanning the QR code for your card will be charged a 20 ₺ authorization',
+        titleText: 'Scan For Ride',
         isUserPremium: false,
       );
       print(barcodeScanRes);
