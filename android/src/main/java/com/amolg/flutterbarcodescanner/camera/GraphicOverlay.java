@@ -30,6 +30,7 @@ import android.widget.TextView;
 
 import com.amolg.flutterbarcodescanner.BarcodeCaptureActivity;
 import com.amolg.flutterbarcodescanner.FlutterBarcodeScannerPlugin;
+import com.amolg.flutterbarcodescanner.R;
 import com.amolg.flutterbarcodescanner.constants.AppConstants;
 import com.amolg.flutterbarcodescanner.utils.AppUtil;
 
@@ -172,25 +173,37 @@ public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
 
         if (!isUserPremium) {
             FrameLayout alertLayout = new FrameLayout(getContext());
-
             TextView alertTextView = new TextView(getContext());
+
+            int pageWidth = (int) (getWidth() * 0.25);
+            int leftPadding = (int) (getWidth() * 0.053);
+            int topPadding = (int) (getHeight() * 0.053);
+
+            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.WRAP_CONTENT,
+                    FrameLayout.LayoutParams.WRAP_CONTENT);
+            layoutParams.setMargins(leftPadding, topPadding, 0, 0);
+
+            layoutParams.setMargins(leftPadding,topPadding,0,0);
+            alertTextView.setLayoutParams(layoutParams);
+
             alertTextView.setText(alertText);
+            alertTextView.setMaxLines(3);
+            alertTextView.setTextSize(14);
+            alertTextView.setMaxEms((int) (pageWidth * 0.085));
             alertTextView.setTextColor(Color.BLACK);
-            alertTextView.setTextSize(12);
-            alertTextView.setBackgroundColor(Color.WHITE);
-            alertTextView.setPadding(13, 13, 13, 13);
 
+            alertTextView.setBackgroundResource(R.drawable.rounded_corner);
+            alertTextView.setPadding(10, 10, 10, 10);
+            alertTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_danger, 0, 0, 0);
+            alertTextView.setCompoundDrawablePadding(10);
+
+            alertLayout.setLayoutParams(layoutParams);
             alertLayout.addView(alertTextView);
-
-
-            int leftPadding = (int) (getWidth() * 0.25);
-            int topPadding = (int) (getHeight() * 0.1);
 
 
             alertLayout.measure(getWidth(), getHeight());
             alertLayout.layout(leftPadding, topPadding, leftPadding, topPadding);
-
-            //TODO position alert text to top center (leftPadding, topPadding)
 
             alertLayout.draw(canvas);
 
