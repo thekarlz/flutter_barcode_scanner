@@ -28,14 +28,6 @@ import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-
-import com.google.android.material.snackbar.Snackbar;
-
-import androidx.core.app.ActivityCompat;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -45,6 +37,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.amolg.flutterbarcodescanner.camera.CameraSource;
 import com.amolg.flutterbarcodescanner.camera.CameraSourcePreview;
@@ -55,6 +50,7 @@ import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.MultiProcessor;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 
@@ -407,7 +403,24 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
                 Toast.makeText(this, "Unable to turn on flash", Toast.LENGTH_SHORT).show();
                 Log.e("BarcodeCaptureActivity", "FlashOnFailure: " + e.getLocalizedMessage());
             }
-        } else if (i == R.id.imgViewKeyboard || i == R.id.imgViewCloseButton) {
+        } else if (i == R.id.imgViewKeyboard) {
+            Barcode barcode = new Barcode();
+            //Pop to keyboard view
+            barcode.rawValue = "-1";
+            barcode.displayValue = "-1";
+            FlutterBarcodeScannerPlugin.onBarcodeScanReceiver(barcode);
+            setResult(Integer.parseInt(barcode.rawValue));
+            finish();
+        } else if (i == R.id.imgViewCloseButton) {
+            Barcode barcode = new Barcode();
+            //Pop to map page
+            barcode.rawValue = "-2";
+            barcode.displayValue = "-2";
+            FlutterBarcodeScannerPlugin.onBarcodeScanReceiver(barcode);
+            setResult(Integer.parseInt(barcode.rawValue));
+            finish();
+        } else {
+            //Any other operation pop to keyboard view
             Barcode barcode = new Barcode();
             barcode.rawValue = "-1";
             barcode.displayValue = "-1";

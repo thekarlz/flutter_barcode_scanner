@@ -5,7 +5,6 @@ import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.DefaultLifecycleObserver;
@@ -18,20 +17,19 @@ import com.google.android.gms.vision.barcode.Barcode;
 import java.util.Map;
 
 import io.flutter.embedding.android.FlutterActivity;
-
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
+import io.flutter.embedding.engine.plugins.lifecycle.FlutterLifecycleAdapter;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.EventChannel;
+import io.flutter.plugin.common.EventChannel.StreamHandler;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.common.PluginRegistry.ActivityResultListener;
-import io.flutter.plugin.common.EventChannel.StreamHandler;
-import io.flutter.embedding.engine.plugins.lifecycle.FlutterLifecycleAdapter;
 
 
 /**
@@ -170,7 +168,14 @@ public class FlutterBarcodeScannerPlugin implements MethodCallHandler, ActivityR
                 arguments = null;
                 return true;
             } else {
-                pendingResult.success("-1");
+                if (resultCode == -1) {
+                    // -1 go to keyboard view
+                    pendingResult.success("-1");
+                } else {
+                    // -2 means pop to map page
+                    pendingResult.success("-2");
+                }
+
             }
         }
         return false;
