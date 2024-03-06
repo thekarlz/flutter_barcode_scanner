@@ -386,6 +386,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
 
     @Override
     public void onClick(View v) {
+        Log.e("BarcodeCaptureActivity", "onClick: " + v.getId());
         int i = v.getId();
         if (i == R.id.imgViewBarcodeCaptureUseFlash &&
                 getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)) {
@@ -429,17 +430,30 @@ public final class BarcodeCaptureActivity extends AppCompatActivity implements B
         }
     }
 
-    private int getInverseCameraFacing(int cameraFacing) {
-        if (cameraFacing == CameraSource.CAMERA_FACING_FRONT) {
-            return CameraSource.CAMERA_FACING_BACK;
+    public void flashButtonPressed() {
+        try {
+            if (flashStatus == USE_FLASH.OFF.ordinal()) {
+                flashStatus = USE_FLASH.ON.ordinal();
+                imgViewBarcodeCaptureUseFlash.setImageResource(R.drawable.ic_flash_on);
+                turnOnOffFlashLight(true);
+            } else {
+                flashStatus = USE_FLASH.OFF.ordinal();
+                imgViewBarcodeCaptureUseFlash.setImageResource(R.drawable.ic_flash_off);
+                turnOnOffFlashLight(false);
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, "Unable to turn on flash", Toast.LENGTH_SHORT).show();
+            Log.e("BarcodeCaptureActivity", "FlashOnFailure: " + e.getLocalizedMessage());
         }
-
-        if (cameraFacing == CameraSource.CAMERA_FACING_BACK) {
-            return CameraSource.CAMERA_FACING_FRONT;
-        }
-
-        // Fallback to camera at the back.
-        return CameraSource.CAMERA_FACING_BACK;
+    }
+    public void keyboardButtonPressed() {
+        Barcode barcode = new Barcode();
+        //Pop to keyboard view
+        barcode.rawValue = "-1";
+        barcode.displayValue = "-1";
+        FlutterBarcodeScannerPlugin.onBarcodeScanReceiver(barcode);
+        setResult(Integer.parseInt(barcode.rawValue));
+        finish();
     }
 
     /**

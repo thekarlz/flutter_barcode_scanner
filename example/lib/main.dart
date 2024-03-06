@@ -65,8 +65,8 @@ class _MyAppState extends State<MyApp> {
         lineColor: '#ff6666',
         scanMode: ScanMode.QR,
         alertText: 'From your wallet after scanning the QR code for your card will be charged a 20 ₺ authorization',
-        titleText: 'Scan For Ride',
-        isUserPremium: false,
+        titleText: 'Sür aslanım',
+        isUserPremium: true,
       );
       print(barcodeScanRes);
     } on PlatformException {
