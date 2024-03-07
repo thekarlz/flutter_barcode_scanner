@@ -24,12 +24,9 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.amolg.flutterbarcodescanner.BarcodeCaptureActivity;
 import com.amolg.flutterbarcodescanner.FlutterBarcodeScannerPlugin;
@@ -178,87 +175,9 @@ public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
             prepareAlertText(canvas);
         }
 
-        drawKeyboardBtn(canvas);
-        drawFlashButton(canvas);
         drawRectangleAndLine(canvas, paint);
     }
 
-    private void drawKeyboardBtn(Canvas canvas) {
-        int leftPadding = (int) (getWidth() * 0.23);
-        int topPadding = (int) (getHeight() * 0.85);
-        int layoutWidth = (int) (getHeight() * 0.1);
-        int layoutHeight = (int) (getHeight() * 0.1);
-
-
-        ImageView keyboardImageView = new ImageView(getContext());
-        FrameLayout frameLayout = new FrameLayout(getContext());
-
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(layoutWidth, layoutHeight);
-
-        layoutParams.setMargins(leftPadding, topPadding, 0, 0);
-        keyboardImageView.setLayoutParams(layoutParams);
-
-        keyboardImageView.setImageResource(R.drawable.ic_keyboard);
-        keyboardImageView.setBackgroundResource(R.drawable.rounded_corner);
-        keyboardImageView.setPadding(15, 15, 15, 15);
-
-        frameLayout.setLayoutParams(layoutParams);
-        frameLayout.addView(keyboardImageView);
-
-        keyboardImageView.setClickable(true);
-        keyboardImageView.setFocusable(true);
-        keyboardImageView.setFocusableInTouchMode(true);
-
-
-        //Also not worked
-        //frameLayout.setClickable(true);
-        //frameLayout.setFocusable(true);
-        //frameLayout.setFocusableInTouchMode(true);
-
-        //Also not worked
-        // frameLayout.setOnClickListener(v -> {
-        //    Log.e("GraphicOverlay", "onClick: " + v.getId());
-        //    Toast.makeText(v.getContext(), "Keyboard clicked", Toast.LENGTH_LONG).show();
-        // });
-
-        keyboardImageView.setOnClickListener(v -> {
-            Log.e("GraphicOverlay", "onClick: " + v.getId());
-            Toast.makeText(v.getContext(), "Keyboard clicked", Toast.LENGTH_LONG).show();
-        });
-
-        frameLayout.measure(getWidth(), getHeight());
-        frameLayout.layout(leftPadding, topPadding, leftPadding, topPadding);
-
-        frameLayout.draw(canvas);
-    }
-
-    private void drawFlashButton(Canvas canvas) {
-        int leftPadding = (int) (getWidth() * 0.6);
-        int topPadding = (int) (getHeight() * 0.85);
-        int layoutWidth = (int) (getHeight() * 0.1);
-        int layoutHeight = (int) (getHeight() * 0.1);
-
-        ImageView flashImageView = new ImageView(getContext());
-        FrameLayout frameLayout = new FrameLayout(getContext());
-
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(layoutWidth, layoutHeight);
-
-        layoutParams.setMargins(leftPadding, topPadding, 0, 0);
-        flashImageView.setLayoutParams(layoutParams);
-
-        flashImageView.setImageResource(R.drawable.ic_flash_on);
-        flashImageView.setBackgroundResource(R.drawable.rounded_corner);
-        flashImageView.setPadding(15, 15, 15, 15);
-
-        frameLayout.setLayoutParams(layoutParams);
-        frameLayout.addView(flashImageView);
-
-
-        frameLayout.measure(getWidth(), getHeight());
-        frameLayout.layout(leftPadding, topPadding, leftPadding, topPadding);
-
-        frameLayout.draw(canvas);
-    }
 
     private void prepareAlertText(Canvas canvas) {
         int pageWidth = (int) (getWidth() * 0.25);
