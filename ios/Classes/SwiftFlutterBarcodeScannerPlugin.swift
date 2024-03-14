@@ -14,6 +14,11 @@ enum ScanMode:Int{
 
 public class SwiftFlutterBarcodeScannerPlugin: NSObject, FlutterPlugin, ScanBarcodeDelegate,FlutterStreamHandler {
     
+    public static var isUserPremium:Bool=false
+    public static var alertText:String=""
+    public static var titleText:String=""
+    
+    
     public static var viewController = UIViewController()
     public static var lineColor:String=""
     public static var cancelButtonText:String=""
@@ -57,6 +62,30 @@ public class SwiftFlutterBarcodeScannerPlugin: NSObject, FlutterPlugin, ScanBarc
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         let args:Dictionary<String, AnyObject> = call.arguments as! Dictionary<String, AnyObject>;
+        
+        //Tripy properties
+        if let titleText = args["titleText"] as? String{
+            SwiftFlutterBarcodeScannerPlugin.titleText = titleText
+        }else {
+            SwiftFlutterBarcodeScannerPlugin.titleText = "Sürüş İçin Tarat"
+        }
+        
+        if let alertText = args["alertText"] as? String{
+            SwiftFlutterBarcodeScannerPlugin.alertText = alertText
+        }else {
+            SwiftFlutterBarcodeScannerPlugin.alertText = "Sürüş başladığında 20₺ provizyon alınacaktır, sürüş sonunda bankanız tarafından provizyon iade edilecektir"
+        }
+        
+        if let isUserPremium = args["isUserPremium"] as? Bool{
+            SwiftFlutterBarcodeScannerPlugin.isUserPremium = isUserPremium
+        }else {
+            SwiftFlutterBarcodeScannerPlugin.isUserPremium = false
+        }
+        
+        
+        
+        
+        
         if let colorCode = args["lineColor"] as? String{
             SwiftFlutterBarcodeScannerPlugin.lineColor = colorCode
         }else {
@@ -175,13 +204,83 @@ class BarcodeScannerViewController: UIViewController {
     
     private lazy var xCor: CGFloat! = {
         return self.isOrientationPortrait ? (screenSize.width - (screenSize.width*0.8))/2 :
-            (screenSize.width - (screenSize.width*0.6))/2
+        (screenSize.width - (screenSize.width*0.6))/2
     }()
     private lazy var yCor: CGFloat! = {
         return self.isOrientationPortrait ? (screenSize.height - (screenSize.width*0.8))/2 :
-            (screenSize.height - (screenSize.height*0.8))/2
+        (screenSize.height - (screenSize.height*0.8))/2
     }()
+    
+    
+    
+    /// Create and return close button
+    private lazy var closeIcon : UIButton! = {
+        let button = UIButton()
+        button.backgroundColor = .white
+        button.layer.cornerRadius = 8
+        button.layer.masksToBounds = true
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(UIImage(named:"ic_close",in:Bundle(for:SwiftFlutterBarcodeScannerPlugin.self),compatibleWith:nil),for: .normal)
+        button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
+        button.contentMode = .center
+        button.addTarget(self, action: #selector(BarcodeScannerViewController.closeButtonClicked), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var titleTextView : UILabel! = {
+        let text = UILabel()
+        text.text=SwiftFlutterBarcodeScannerPlugin.titleText
+        text.textColor = .white
+        text.font=UIFont.systemFont(ofSize: 23,weight: UIFont.Weight.bold)
+        text.translatesAutoresizingMaskIntoConstraints = false
+        text.contentMode = .center
+        text.textAlignment = .center
+        
+        return text
+    }()
+    
+    private lazy var alertTextView : UILabel! = {
+        
+        let text = PaddingLabel(withInsets: 8, 8, 8, 8)
+        
+        
+        text.textColor = .black
+        text.font=UIFont.systemFont(ofSize: 14,weight: UIFont.Weight.regular)
+        text.numberOfLines = 0
+        text.translatesAutoresizingMaskIntoConstraints = false
+        text.clipsToBounds = true
+        text.layer.cornerRadius = 10
+        text.backgroundColor = .white
+        
+        let imageAttachment = NSTextAttachment()
+        imageAttachment.image = UIImage(named: "ic_danger")
+        
+        
+        let imageAttributedString = NSAttributedString(attachment: imageAttachment)
+        
+       
+        let alertText = NSMutableAttributedString(string: SwiftFlutterBarcodeScannerPlugin.alertText)
+        
+        
+        //TODO image shows blank also inserts it to the top left not center of left like a Row
+        alertText.insert(imageAttributedString, at: 0)
+        
+        
+        
+        
+        text.attributedText=alertText
+        
+        if(SwiftFlutterBarcodeScannerPlugin.isUserPremium){
+            text.isHidden = true
+        }
+        
+        return text
+    }()
+    
+    
+    
     //Bottom view
+    //---------------------TODO delete
     private lazy var bottomView : UIView! = {
         let view = UIView()
         view.backgroundColor = UIColor.black
@@ -189,7 +288,7 @@ class BarcodeScannerViewController: UIViewController {
         return view
     }()
     
-    /// Create and return flash button
+    //---------------------TODO delete
     private lazy var flashIcon : UIButton! = {
         let flashButton = UIButton()
         flashButton.setTitle("Flash",for:.normal)
@@ -201,7 +300,7 @@ class BarcodeScannerViewController: UIViewController {
         return flashButton
     }()
     
-    /// Create and return switch camera button
+    //---------------------TODO delete
     private lazy var switchCameraButton : UIButton! = {
         let button = UIButton()
         
@@ -213,7 +312,7 @@ class BarcodeScannerViewController: UIViewController {
     }()
     
     
-    /// Create and return cancel button
+    //---------------------TODO delete
     public lazy var cancelButton: UIButton! = {
         let view = UIButton()
         view.setTitle(SwiftFlutterBarcodeScannerPlugin.cancelButtonText, for: .normal)
@@ -232,7 +331,7 @@ class BarcodeScannerViewController: UIViewController {
         super.viewWillAppear(animated)
         self.moveVertically()
     }
-
+    
     override public func viewDidDisappear(_ animated: Bool){
         // Stop video capture
         captureSession.stopRunning()
@@ -342,6 +441,12 @@ class BarcodeScannerViewController: UIViewController {
             self.view.bringSubviewToFront(qrCodeFrameView)
             qrCodeFrameView.layer.insertSublayer(fillLayer, below: videoPreviewLayer!)
             self.view.bringSubviewToFront(bottomView)
+            
+            
+            self.view.bringSubviewToFront(closeIcon)
+            self.view.bringSubviewToFront(titleTextView)
+            self.view.bringSubviewToFront(alertTextView)
+            
             self.view.bringSubviewToFront(flashIcon)
             if(!SwiftFlutterBarcodeScannerPlugin.isShowFlashIcon){
                 flashIcon.isHidden=true
@@ -359,6 +464,13 @@ class BarcodeScannerViewController: UIViewController {
     
     /// Apply constraints to ui components
     private func setConstraintsForControls() {
+        
+        
+        
+        self.view.addSubview(closeIcon)
+        self.view.addSubview(titleTextView)
+        self.view.addSubview(alertTextView)
+        
         self.view.addSubview(bottomView)
         self.view.addSubview(cancelButton)
         self.view.addSubview(flashIcon)
@@ -368,6 +480,26 @@ class BarcodeScannerViewController: UIViewController {
         bottomView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant:0).isActive = true
         bottomView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant:0).isActive = true
         bottomView.heightAnchor.constraint(equalToConstant:self.isOrientationPortrait ? 100.0 : 70.0).isActive=true
+        
+        
+        
+        closeIcon.translatesAutoresizingMaskIntoConstraints = false
+        closeIcon.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        closeIcon.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
+        closeIcon.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        
+        
+        
+        
+        titleTextView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        titleTextView.topAnchor.constraint(equalTo: view.topAnchor, constant: view.bounds.height * 0.078).isActive = true
+        
+        
+        alertTextView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.9).isActive = true
+        alertTextView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        alertTextView.topAnchor.constraint(equalTo: view.topAnchor, constant: view.bounds.height * 0.16).isActive = true
+        
+        
         
         flashIcon.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         flashIcon.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10).isActive = true
@@ -381,7 +513,6 @@ class BarcodeScannerViewController: UIViewController {
         cancelButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant:10).isActive = true
         
         switchCameraButton.translatesAutoresizingMaskIntoConstraints = false
-        // A little bit to the right.
         switchCameraButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10).isActive = true
         switchCameraButton.heightAnchor.constraint(equalToConstant: 70.0).isActive = true
         switchCameraButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
@@ -465,6 +596,21 @@ class BarcodeScannerViewController: UIViewController {
             if self.delegate != nil {
                 self.dismiss(animated: true, completion: {
                     self.delegate?.userDidScanWith(barcode: "-1")
+                })
+            }
+        }
+    }
+    
+    /// Cancel button click event listener
+    @IBAction private func closeButtonClicked() {
+        if SwiftFlutterBarcodeScannerPlugin.isContinuousScan{
+            self.dismiss(animated: true, completion: {
+                SwiftFlutterBarcodeScannerPlugin.onBarcodeScanReceiver(barcode: "-2")
+            })
+        }else{
+            if self.delegate != nil {
+                self.dismiss(animated: true, completion: {
+                    self.delegate?.userDidScanWith(barcode: "-2")
                 })
             }
         }
@@ -555,8 +701,8 @@ class BarcodeScannerViewController: UIViewController {
     
     var isLandscape: Bool {
         return UIDevice.current.orientation.isValidInterfaceOrientation
-            ? UIDevice.current.orientation.isPortrait
-            : UIApplication.shared.statusBarOrientation.isPortrait
+        ? UIDevice.current.orientation.isPortrait
+        : UIApplication.shared.statusBarOrientation.isPortrait
     }
     
     private func launchApp(decodedURL: String) {
@@ -626,10 +772,10 @@ extension BarcodeScannerViewController{
             
             self.setVideoPreviewOrientation()
             self.xCor = self.isOrientationPortrait ? (self.screenSize.width - (self.screenSize.width*0.8))/2 :
-                (self.screenSize.width - (self.screenSize.width*0.6))/2
+            (self.screenSize.width - (self.screenSize.width*0.6))/2
             
             self.yCor = self.isOrientationPortrait ? (self.screenSize.height - (self.screenSize.width*0.8))/2 :
-                (self.screenSize.height - (self.screenSize.height*0.8))/2
+            (self.screenSize.height - (self.screenSize.height*0.8))/2
             
             self.videoPreviewLayer?.layoutIfNeeded()
             self.removeAllViews {
@@ -716,4 +862,39 @@ func hexStringToUIColor (hex:String) -> UIColor {
         blue: bValue,
         alpha: aValue
     )
+}
+
+class PaddingLabel: UILabel {
+    
+    var topInset: CGFloat
+    var bottomInset: CGFloat
+    var leftInset: CGFloat
+    var rightInset: CGFloat
+    
+    required init(withInsets top: CGFloat, _ bottom: CGFloat, _ left: CGFloat, _ right: CGFloat) {
+        self.topInset = top
+        self.bottomInset = bottom
+        self.leftInset = left
+        self.rightInset = right
+        super.init(frame: CGRect.zero)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func drawText(in rect: CGRect) {
+        let insets = UIEdgeInsets(top: topInset, left: leftInset, bottom: bottomInset, right: rightInset)
+        super.drawText(in: rect.inset(by: insets))
+    }
+    
+    override var intrinsicContentSize: CGSize {
+        get {
+            var contentSize = super.intrinsicContentSize
+            contentSize.height += topInset + bottomInset
+            contentSize.width += leftInset + rightInset
+            return contentSize
+        }
+    }
+    
 }
