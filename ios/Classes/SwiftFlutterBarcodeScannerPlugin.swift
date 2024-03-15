@@ -22,7 +22,7 @@ public class SwiftFlutterBarcodeScannerPlugin: NSObject, FlutterPlugin, ScanBarc
     public static var viewController = UIViewController()
     public static var lineColor:String=""
     public static var cancelButtonText:String=""
-    public static var isShowFlashIcon:Bool=false
+    public static var isShowFlashIcon:Bool=true
     var pendingResult:FlutterResult!
     public static var isContinuousScan:Bool=false
     static var barcodeStream:FlutterEventSink?=nil
@@ -99,7 +99,7 @@ public class SwiftFlutterBarcodeScannerPlugin: NSObject, FlutterPlugin, ScanBarc
         if let flashStatus = args["isShowFlashIcon"] as? Bool{
             SwiftFlutterBarcodeScannerPlugin.isShowFlashIcon = flashStatus
         }else {
-            SwiftFlutterBarcodeScannerPlugin.isShowFlashIcon = false
+            SwiftFlutterBarcodeScannerPlugin.isShowFlashIcon = true
         }
         if let isContinuousScan = args["isContinuousScan"] as? Bool{
             SwiftFlutterBarcodeScannerPlugin.isContinuousScan = isContinuousScan
@@ -211,7 +211,33 @@ class BarcodeScannerViewController: UIViewController {
         (screenSize.height - (screenSize.height*0.8))/2
     }()
     
+    private lazy var keyboardIcon : UIButton! = {
+        let button = UIButton()
+        button.backgroundColor = .white
+        button.layer.cornerRadius = 8
+        button.layer.masksToBounds = true
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(UIImage(named:"ic_keyboard",in:Bundle(for:SwiftFlutterBarcodeScannerPlugin.self),compatibleWith:nil),for: .normal)
+        button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 8)
+        button.contentMode = .center
+        button.addTarget(self, action: #selector(BarcodeScannerViewController.keyboardButtonClicked), for: .touchUpInside)
+        return button
+    }()
     
+    
+    private lazy var flashIcon : UIButton! = {
+        let button = UIButton()
+        button.backgroundColor = .white
+        button.layer.cornerRadius = 8
+        button.layer.masksToBounds = true
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.contentEdgeInsets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
+        button.contentMode = .center
+        
+        button.setImage(UIImage(named: "ic_flash_off", in: Bundle(for: SwiftFlutterBarcodeScannerPlugin.self), compatibleWith: nil),for:.normal)
+        button.addTarget(self, action: #selector(BarcodeScannerViewController.flashButtonClicked), for: .touchUpInside)
+        return button
+    }()
     
     /// Create and return close button
     private lazy var closeIcon : UIButton! = {
@@ -239,36 +265,20 @@ class BarcodeScannerViewController: UIViewController {
         return text
     }()
     
-    private lazy var alertTextView : UILabel! = {
+    private lazy var alertTextView : UIButton! = {
         
-        let text = PaddingLabel(withInsets: 8, 8, 8, 8)
+        let text = UIButton(type: .custom)
         
-        
-        text.textColor = .black
-        text.font=UIFont.systemFont(ofSize: 14,weight: UIFont.Weight.regular)
-        text.numberOfLines = 0
+        text.setTitle(SwiftFlutterBarcodeScannerPlugin.alertText, for: UIControl.State.normal)
         text.translatesAutoresizingMaskIntoConstraints = false
         text.clipsToBounds = true
         text.layer.cornerRadius = 10
         text.backgroundColor = .white
-        
-        let imageAttachment = NSTextAttachment()
-        imageAttachment.image = UIImage(named: "ic_danger")
-        
-        
-        let imageAttributedString = NSAttributedString(attachment: imageAttachment)
-        
-       
-        let alertText = NSMutableAttributedString(string: SwiftFlutterBarcodeScannerPlugin.alertText)
-        
-        
-        //TODO image shows blank also inserts it to the top left not center of left like a Row
-        alertText.insert(imageAttributedString, at: 0)
-        
-        
-        
-        
-        text.attributedText=alertText
+        text.setTitleColor(.black, for: .normal)
+
+        text.setImage(UIImage(named: "ic_danger"), for: UIControl.State.normal)
+        text.titleLabel?.numberOfLines = 0
+        text.titleLabel?.font = .systemFont(ofSize: 14.0, weight: .regular)
         
         if(SwiftFlutterBarcodeScannerPlugin.isUserPremium){
             text.isHidden = true
@@ -277,49 +287,6 @@ class BarcodeScannerViewController: UIViewController {
         return text
     }()
     
-    
-    
-    //Bottom view
-    //---------------------TODO delete
-    private lazy var bottomView : UIView! = {
-        let view = UIView()
-        view.backgroundColor = UIColor.black
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    //---------------------TODO delete
-    private lazy var flashIcon : UIButton! = {
-        let flashButton = UIButton()
-        flashButton.setTitle("Flash",for:.normal)
-        flashButton.translatesAutoresizingMaskIntoConstraints=false
-        
-        flashButton.setImage(UIImage(named: "ic_flash_off", in: Bundle(for: SwiftFlutterBarcodeScannerPlugin.self), compatibleWith: nil),for:.normal)
-        
-        flashButton.addTarget(self, action: #selector(BarcodeScannerViewController.flashButtonClicked), for: .touchUpInside)
-        return flashButton
-    }()
-    
-    //---------------------TODO delete
-    private lazy var switchCameraButton : UIButton! = {
-        let button = UIButton()
-        
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(UIImage(named: "ic_switch_camera", in: Bundle(for: SwiftFlutterBarcodeScannerPlugin.self), compatibleWith: nil),for: .normal)
-        button.addTarget(self, action: #selector(BarcodeScannerViewController.switchCameraButtonClicked), for: .touchUpInside)
-        
-        return button
-    }()
-    
-    
-    //---------------------TODO delete
-    public lazy var cancelButton: UIButton! = {
-        let view = UIButton()
-        view.setTitle(SwiftFlutterBarcodeScannerPlugin.cancelButtonText, for: .normal)
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.addTarget(self, action: #selector(BarcodeScannerViewController.cancelButtonClicked), for: .touchUpInside)
-        return view
-    }()
     
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -440,22 +407,22 @@ class BarcodeScannerViewController: UIViewController {
             self.view.addSubview(qrCodeFrameView)
             self.view.bringSubviewToFront(qrCodeFrameView)
             qrCodeFrameView.layer.insertSublayer(fillLayer, below: videoPreviewLayer!)
-            self.view.bringSubviewToFront(bottomView)
-            
             
             self.view.bringSubviewToFront(closeIcon)
             self.view.bringSubviewToFront(titleTextView)
+            
             self.view.bringSubviewToFront(alertTextView)
             
             self.view.bringSubviewToFront(flashIcon)
+            self.view.bringSubviewToFront(keyboardIcon)
+            
             if(!SwiftFlutterBarcodeScannerPlugin.isShowFlashIcon){
                 flashIcon.isHidden=true
             }
             qrCodeFrameView.layoutIfNeeded()
             qrCodeFrameView.layoutSubviews()
             qrCodeFrameView.setNeedsUpdateConstraints()
-            self.view.bringSubviewToFront(cancelButton)
-            self.view.bringSubviewToFront(switchCameraButton)
+            
         }
         setConstraintsForControls()
         self.drawLine()
@@ -465,22 +432,13 @@ class BarcodeScannerViewController: UIViewController {
     /// Apply constraints to ui components
     private func setConstraintsForControls() {
         
-        
-        
         self.view.addSubview(closeIcon)
         self.view.addSubview(titleTextView)
+        
         self.view.addSubview(alertTextView)
         
-        self.view.addSubview(bottomView)
-        self.view.addSubview(cancelButton)
+        self.view.addSubview(keyboardIcon)
         self.view.addSubview(flashIcon)
-        self.view.addSubview(switchCameraButton)
-        
-        bottomView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant:0).isActive = true
-        bottomView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant:0).isActive = true
-        bottomView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant:0).isActive = true
-        bottomView.heightAnchor.constraint(equalToConstant:self.isOrientationPortrait ? 100.0 : 70.0).isActive=true
-        
         
         
         closeIcon.translatesAutoresizingMaskIntoConstraints = false
@@ -488,34 +446,27 @@ class BarcodeScannerViewController: UIViewController {
         closeIcon.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
         closeIcon.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
         
-        
-        
-        
         titleTextView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         titleTextView.topAnchor.constraint(equalTo: view.topAnchor, constant: view.bounds.height * 0.078).isActive = true
         
-        
         alertTextView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.9).isActive = true
+        alertTextView.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.079).isActive = true
         alertTextView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         alertTextView.topAnchor.constraint(equalTo: view.topAnchor, constant: view.bounds.height * 0.16).isActive = true
         
+        keyboardIcon.translatesAutoresizingMaskIntoConstraints = false
+        keyboardIcon.topAnchor.constraint(equalTo: view.topAnchor, constant: view.bounds.height * 0.8).isActive = true
+        keyboardIcon.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: view.bounds.width * 0.25).isActive = true
+        keyboardIcon.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.06).isActive = true
+        keyboardIcon.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.13).isActive = true
         
         
-        flashIcon.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        flashIcon.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10).isActive = true
-        flashIcon.heightAnchor.constraint(equalToConstant: 40.0).isActive = true
-        flashIcon.widthAnchor.constraint(equalToConstant: 40.0).isActive = true
+        flashIcon.translatesAutoresizingMaskIntoConstraints = false
+        flashIcon.topAnchor.constraint(equalTo: view.topAnchor, constant: view.bounds.height * 0.8).isActive = true
+        flashIcon.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -(view.bounds.width * 0.25)).isActive = true
+        flashIcon.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.06).isActive = true
+        flashIcon.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.12).isActive = true
         
-        cancelButton.translatesAutoresizingMaskIntoConstraints = false
-        cancelButton.widthAnchor.constraint(equalToConstant: 100.0).isActive = true
-        cancelButton.heightAnchor.constraint(equalToConstant: 70.0).isActive = true
-        cancelButton.bottomAnchor.constraint(equalTo:view.bottomAnchor,constant: 0).isActive=true
-        cancelButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant:10).isActive = true
-        
-        switchCameraButton.translatesAutoresizingMaskIntoConstraints = false
-        switchCameraButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10).isActive = true
-        switchCameraButton.heightAnchor.constraint(equalToConstant: 70.0).isActive = true
-        switchCameraButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
     }
     
     /// Flash button click event listener
@@ -586,8 +537,8 @@ class BarcodeScannerViewController: UIViewController {
     }
     
     
-    /// Cancel button click event listener
-    @IBAction private func cancelButtonClicked() {
+    /// Returns -1 for keyboard input
+    @IBAction private func keyboardButtonClicked() {
         if SwiftFlutterBarcodeScannerPlugin.isContinuousScan{
             self.dismiss(animated: true, completion: {
                 SwiftFlutterBarcodeScannerPlugin.onBarcodeScanReceiver(barcode: "-1")
@@ -601,7 +552,7 @@ class BarcodeScannerViewController: UIViewController {
         }
     }
     
-    /// Cancel button click event listener
+    /// Return -2 for pop
     @IBAction private func closeButtonClicked() {
         if SwiftFlutterBarcodeScannerPlugin.isContinuousScan{
             self.dismiss(animated: true, completion: {
@@ -613,25 +564,6 @@ class BarcodeScannerViewController: UIViewController {
                     self.delegate?.userDidScanWith(barcode: "-2")
                 })
             }
-        }
-    }
-    
-    /// Switch camera button click event listener
-    @IBAction private func switchCameraButtonClicked() {
-        // Get the current active input.
-        guard let currentInput = captureSession.inputs.first as? AVCaptureDeviceInput else { return }
-        let newPosition = getInversePosition(position: currentInput.device.position);
-        guard let device = getCaptureDeviceByPosition(position: newPosition) else { return }
-        do {
-            let newInput = try AVCaptureDeviceInput(device: device)
-            // Replace current input with the new one.
-            captureSession.removeInput(currentInput)
-            captureSession.addInput(newInput)
-            // Disable flash by default
-            setFlashStatus(device: device, mode: .off)
-        } catch let error {
-            print(error)
-            return
         }
     }
     

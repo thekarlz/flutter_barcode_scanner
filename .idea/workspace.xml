@@ -12,16 +12,11 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="da89e606-25cd-40ec-9bab-57632cc5ea41" name="Default Changelist" comment="texts translated to eng">
+    <list default="true" id="da89e606-25cd-40ec-9bab-57632cc5ea41" name="Default Changelist" comment="icons added, app bar works correctly, isUserPremium conditions works fine, alertText in progress">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Flutter/AppFrameworkInfo.plist" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Flutter/AppFrameworkInfo.plist" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Flutter/flutter_export_environment.sh" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Flutter/flutter_export_environment.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Podfile" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Podfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Podfile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Runner/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Runner/Info.plist" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Assets/ic_close.PNG" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Assets/ic_close.PNG" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Assets/ic_keyboard.PNG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Assets/ic_flash_off.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Assets/ic_flash_on.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/Assets/ic_switch_camera.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/ios/Classes/SwiftFlutterBarcodeScannerPlugin.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/SwiftFlutterBarcodeScannerPlugin.swift" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -90,7 +85,14 @@
       <option name="project" value="LOCAL" />
       <updated>1707582520512</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="icons added, app bar works correctly, isUserPremium conditions works fine, alertText in progress">
+      <created>1710424049494</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1710424049494</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -106,7 +108,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="texts translated to eng" />
-    <option name="LAST_COMMIT_MESSAGE" value="texts translated to eng" />
+    <MESSAGE value="icons added, app bar works correctly, isUserPremium conditions works fine, alertText in progress" />
+    <option name="LAST_COMMIT_MESSAGE" value="icons added, app bar works correctly, isUserPremium conditions works fine, alertText in progress" />
   </component>
   <component name="masterDetails">
     <states>
