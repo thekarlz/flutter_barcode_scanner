@@ -21,7 +21,6 @@ public class SwiftFlutterBarcodeScannerPlugin: NSObject, FlutterPlugin, ScanBarc
     
     public static var viewController = UIViewController()
     public static var lineColor:String=""
-    public static var cancelButtonText:String=""
     public static var isShowFlashIcon:Bool=true
     var pendingResult:FlutterResult!
     public static var isContinuousScan:Bool=false
@@ -90,16 +89,6 @@ public class SwiftFlutterBarcodeScannerPlugin: NSObject, FlutterPlugin, ScanBarc
             SwiftFlutterBarcodeScannerPlugin.lineColor = colorCode
         }else {
             SwiftFlutterBarcodeScannerPlugin.lineColor = "#ff6666"
-        }
-        if let buttonText = args["cancelButtonText"] as? String{
-            SwiftFlutterBarcodeScannerPlugin.cancelButtonText = buttonText
-        }else {
-            SwiftFlutterBarcodeScannerPlugin.cancelButtonText = "Cancel"
-        }
-        if let flashStatus = args["isShowFlashIcon"] as? Bool{
-            SwiftFlutterBarcodeScannerPlugin.isShowFlashIcon = flashStatus
-        }else {
-            SwiftFlutterBarcodeScannerPlugin.isShowFlashIcon = true
         }
         if let isContinuousScan = args["isContinuousScan"] as? Bool{
             SwiftFlutterBarcodeScannerPlugin.isContinuousScan = isContinuousScan
