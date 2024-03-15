@@ -236,7 +236,7 @@ class BarcodeScannerViewController: UIViewController {
         button.layer.masksToBounds = true
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(named:"ic_close_app_bar",in:Bundle(for:SwiftFlutterBarcodeScannerPlugin.self),compatibleWith:nil),for: .normal)
-        button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
+        button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 11, bottom: 0, right: 11)
         button.contentMode = .center
         button.addTarget(self, action: #selector(BarcodeScannerViewController.closeButtonClicked), for: .touchUpInside)
         return button
@@ -432,7 +432,7 @@ class BarcodeScannerViewController: UIViewController {
         
         
         closeIcon.translatesAutoresizingMaskIntoConstraints = false
-        closeIcon.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        closeIcon.heightAnchor.constraint(equalToConstant: view.bounds.height * 0.047).isActive = true
         closeIcon.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
         closeIcon.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
         
