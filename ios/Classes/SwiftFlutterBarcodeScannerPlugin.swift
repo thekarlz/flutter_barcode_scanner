@@ -264,11 +264,12 @@ class BarcodeScannerViewController: UIViewController {
         text.layer.cornerRadius = 10
         text.backgroundColor = .white
         text.setTitleColor(.black, for: .normal)
-
-        text.setImage(UIImage(named: "ic_danger"), for: UIControl.State.normal)
+        text.setImage(UIImage(named: "ic_danger", in: Bundle(for: SwiftFlutterBarcodeScannerPlugin.self), compatibleWith: nil),for:.normal)
         text.titleLabel?.numberOfLines = 0
         text.titleLabel?.font = .systemFont(ofSize: 14.0, weight: .regular)
-        
+        text.titleEdgeInsets = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 2)
+
+
         if(SwiftFlutterBarcodeScannerPlugin.isUserPremium){
             text.isHidden = true
         }

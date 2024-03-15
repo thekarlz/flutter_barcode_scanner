@@ -12,10 +12,8 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="da89e606-25cd-40ec-9bab-57632cc5ea41" name="Default Changelist" comment="iOS:&#10;- cancel button text removed">
+    <list default="true" id="da89e606-25cd-40ec-9bab-57632cc5ea41" name="Default Changelist" comment="iOS:&#10;- flash icons added&#10;- Padding label removed">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Classes/SwiftFlutterBarcodeScannerPlugin.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/SwiftFlutterBarcodeScannerPlugin.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/flutter_barcode_scanner.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/flutter_barcode_scanner.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -104,7 +102,14 @@
       <option name="project" value="LOCAL" />
       <updated>1710495365409</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="iOS:&#10;- flash icons added&#10;- Padding label removed">
+      <created>1710503569323</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1710503569323</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -123,7 +128,8 @@
     <MESSAGE value="icons added, app bar works correctly, isUserPremium conditions works fine, alertText in progress" />
     <MESSAGE value="iOS:&#10;- keyboard and flash icons works, only alert text wont show ic_danger image" />
     <MESSAGE value="iOS:&#10;- cancel button text removed" />
-    <option name="LAST_COMMIT_MESSAGE" value="iOS:&#10;- cancel button text removed" />
+    <MESSAGE value="iOS:&#10;- flash icons added&#10;- Padding label removed" />
+    <option name="LAST_COMMIT_MESSAGE" value="iOS:&#10;- flash icons added&#10;- Padding label removed" />
   </component>
   <component name="masterDetails">
     <states>
