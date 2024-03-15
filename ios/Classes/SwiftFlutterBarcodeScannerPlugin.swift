@@ -235,7 +235,7 @@ class BarcodeScannerViewController: UIViewController {
         button.layer.cornerRadius = 8
         button.layer.masksToBounds = true
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(UIImage(named:"ic_close",in:Bundle(for:SwiftFlutterBarcodeScannerPlugin.self),compatibleWith:nil),for: .normal)
+        button.setImage(UIImage(named:"ic_close_app_bar",in:Bundle(for:SwiftFlutterBarcodeScannerPlugin.self),compatibleWith:nil),for: .normal)
         button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
         button.contentMode = .center
         button.addTarget(self, action: #selector(BarcodeScannerViewController.closeButtonClicked), for: .touchUpInside)
@@ -268,8 +268,8 @@ class BarcodeScannerViewController: UIViewController {
         text.titleLabel?.numberOfLines = 0
         text.titleLabel?.font = .systemFont(ofSize: 14.0, weight: .regular)
         text.titleEdgeInsets = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 2)
-
-
+        
+        
         if(SwiftFlutterBarcodeScannerPlugin.isUserPremium){
             text.isHidden = true
         }
