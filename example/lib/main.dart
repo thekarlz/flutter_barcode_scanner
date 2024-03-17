@@ -25,7 +25,7 @@ class _MyAppState extends State<MyApp> {
       scanMode: ScanMode.QR,
       alertText: 'From your wallet after scanning the QR code for your card will be charged a 20 ₺ authorization',
       titleText: 'Scan For Ride',
-      isUserPremium: false,
+      showAlertText: false,
     )!
         .listen((barcode) => print(barcode));
   }
@@ -39,7 +39,7 @@ class _MyAppState extends State<MyApp> {
         scanMode: ScanMode.QR,
         alertText: 'From your wallet after scanning the QR code for your card will be charged a 20 ₺ authorization',
         titleText: 'Scan For Ride',
-        isUserPremium: false,
+        showAlertText: false,
       );
       print(barcodeScanRes);
     } on PlatformException {
@@ -66,7 +66,7 @@ class _MyAppState extends State<MyApp> {
         scanMode: ScanMode.QR,
         alertText: 'From your wallet after scanning the QR code for your card will be charged a 20 ₺ authorization',
         titleText: 'Sür aslanım',
-        isUserPremium: true,
+        showAlertText: true,
       );
       print(barcodeScanRes);
     } on PlatformException {

@@ -22,13 +22,13 @@ class FlutterBarcodeScanner {
   /// displayed if [isShowFlashIcon] is true. The text of the cancel button can
   /// be customized with the [cancelButtonText] string.
   static Future<String> scanBarcode(
-      {required String lineColor, required ScanMode scanMode, required String alertText,required String titleText, required bool isUserPremium}) async {
+      {required String lineColor, required ScanMode scanMode, required String alertText,required String titleText, required bool showAlertText}) async {
     // Pass params to the plugin
     Map params = <String, dynamic>{
       'lineColor': lineColor,
       'isContinuousScan': false,
       'scanMode': scanMode.index,
-      'isUserPremium': isUserPremium,
+      'showAlertText': showAlertText,
       'alertText': alertText,
       'titleText': titleText,
 
@@ -51,14 +51,14 @@ class FlutterBarcodeScanner {
     required ScanMode scanMode,
     required String alertText,
     required String titleText,
-    required bool isUserPremium,
+    required bool showAlertText,
   }) {
     // Pass params to the plugin
     Map params = <String, dynamic>{
       'lineColor': lineColor,
       'isContinuousScan': false,
       'scanMode': scanMode.index,
-      'isUserPremium': isUserPremium,
+      'showAlertText': showAlertText,
       'alertText': alertText,
       'titleText': titleText,
     };

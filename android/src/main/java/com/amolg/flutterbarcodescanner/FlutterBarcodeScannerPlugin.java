@@ -48,7 +48,7 @@ public class FlutterBarcodeScannerPlugin implements MethodCallHandler, ActivityR
     public static String alertText = "";
     public static String titleText = "";
     public static boolean isContinuousScan = false;
-    public static boolean isUserPremium = false;
+    public static boolean showAlertText = false;
     static EventChannel.EventSink barcodeStream;
     private EventChannel eventChannel;
 
@@ -103,7 +103,7 @@ public class FlutterBarcodeScannerPlugin implements MethodCallHandler, ActivityR
 
                 alertText = (String) arguments.get("alertText");
                 titleText = (String) arguments.get("titleText");
-                isUserPremium = (boolean) arguments.get("isUserPremium");
+                showAlertText = (boolean) arguments.get("showAlertText");
 
                 if (null == lineColor || lineColor.equalsIgnoreCase("")) {
                     lineColor = "#DC143C";

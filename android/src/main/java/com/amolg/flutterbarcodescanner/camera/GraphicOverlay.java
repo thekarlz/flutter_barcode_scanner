@@ -60,7 +60,7 @@ public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
     private boolean revAnimation;
 
     private final String alertText;
-    private final boolean isUserPremium;
+    private final boolean showAlertText;
 
 
     public static abstract class Graphic {
@@ -106,7 +106,7 @@ public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
 
         lineColor = Color.parseColor(FlutterBarcodeScannerPlugin.lineColor);
         alertText = FlutterBarcodeScannerPlugin.alertText;
-        isUserPremium = FlutterBarcodeScannerPlugin.isUserPremium;
+        showAlertText = FlutterBarcodeScannerPlugin.showAlertText;
 
 
         lineWidth = AppConstants.BARCODE_LINE_WIDTH;
@@ -171,7 +171,7 @@ public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
         super.onDraw(canvas);
         Paint paint = new Paint();
 
-        if (!isUserPremium) {
+        if (!showAlertText) {
             prepareAlertText(canvas);
         }
 

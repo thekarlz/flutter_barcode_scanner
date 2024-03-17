@@ -12,7 +12,9 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="da89e606-25cd-40ec-9bab-57632cc5ea41" name="Default Changelist" comment="iOS:&#10;- alert text bundle error fixed now shows with danger icon" />
+    <list default="true" id="da89e606-25cd-40ec-9bab-57632cc5ea41" name="Default Changelist" comment="iOS:&#10;- close icon made smaller">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -114,7 +116,21 @@
       <option name="project" value="LOCAL" />
       <updated>1710506295561</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="iOS:&#10;- ic_close.PNG renamed to ic_close_app_bar.png">
+      <created>1710507607794</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1710507607794</updated>
+    </task>
+    <task id="LOCAL-00008" summary="iOS:&#10;- close icon made smaller">
+      <created>1710508970271</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1710508970271</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -135,7 +151,9 @@
     <MESSAGE value="iOS:&#10;- cancel button text removed" />
     <MESSAGE value="iOS:&#10;- flash icons added&#10;- Padding label removed" />
     <MESSAGE value="iOS:&#10;- alert text bundle error fixed now shows with danger icon" />
-    <option name="LAST_COMMIT_MESSAGE" value="iOS:&#10;- alert text bundle error fixed now shows with danger icon" />
+    <MESSAGE value="iOS:&#10;- ic_close.PNG renamed to ic_close_app_bar.png" />
+    <MESSAGE value="iOS:&#10;- close icon made smaller" />
+    <option name="LAST_COMMIT_MESSAGE" value="iOS:&#10;- close icon made smaller" />
   </component>
   <component name="masterDetails">
     <states>

@@ -14,7 +14,7 @@ enum ScanMode:Int{
 
 public class SwiftFlutterBarcodeScannerPlugin: NSObject, FlutterPlugin, ScanBarcodeDelegate,FlutterStreamHandler {
     
-    public static var isUserPremium:Bool=false
+    public static var showAlertText:Bool=false
     public static var alertText:String=""
     public static var titleText:String=""
     
@@ -75,10 +75,10 @@ public class SwiftFlutterBarcodeScannerPlugin: NSObject, FlutterPlugin, ScanBarc
             SwiftFlutterBarcodeScannerPlugin.alertText = "Sürüş başladığında 20₺ provizyon alınacaktır, sürüş sonunda bankanız tarafından provizyon iade edilecektir"
         }
         
-        if let isUserPremium = args["isUserPremium"] as? Bool{
-            SwiftFlutterBarcodeScannerPlugin.isUserPremium = isUserPremium
+        if let showAlertText = args["showAlertText"] as? Bool{
+            SwiftFlutterBarcodeScannerPlugin.showAlertText = showAlertText
         }else {
-            SwiftFlutterBarcodeScannerPlugin.isUserPremium = false
+            SwiftFlutterBarcodeScannerPlugin.showAlertText = false
         }
         
         
@@ -270,7 +270,7 @@ class BarcodeScannerViewController: UIViewController {
         text.titleEdgeInsets = UIEdgeInsets(top: 0, left: 6, bottom: 0, right: 2)
         
         
-        if(SwiftFlutterBarcodeScannerPlugin.isUserPremium){
+        if(SwiftFlutterBarcodeScannerPlugin.showAlertText){
             text.isHidden = true
         }
         
