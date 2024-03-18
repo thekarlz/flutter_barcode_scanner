@@ -192,9 +192,9 @@ public class GraphicOverlay<T extends GraphicOverlay.Graphic> extends View {
         alertTextView.setLayoutParams(layoutParams);
 
         alertTextView.setText(alertText);
-        alertTextView.setMaxLines(3);
-        alertTextView.setTextSize(14);
-        alertTextView.setMaxEms((int) (pageWidth * 0.085));
+        alertTextView.setMaxLines(4);
+        alertTextView.setTextSize(13);
+        alertTextView.setMaxEms((int) (pageWidth * 0.082));
         alertTextView.setTextColor(Color.BLACK);
 
         alertTextView.setBackgroundResource(R.drawable.rounded_corner);
